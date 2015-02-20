@@ -9,13 +9,20 @@
  
 	<camelContext xmlns="http://camel.apache.org/schema/spring">
 		<route id="RS_RestletDemo">
-			<from uri="restlet:/demo/{id}" />
+			<from uri="restlet://demo/{id}" />
 			<transform>
-				<simple>Request type : ${header.CamelHttpMethod} and ID :
-					${header.id}</simple>
+				<simple>Request type : ${header.CamelHttpMethod} and ID : ${header.id}</simple>
 			</transform>
 		</route>
-	</camelContext>
+		
+		<route id="RS_RestletDemo1">
+			<from uri="restlet://todo/{id}" />
+			<transform>
+				<method bean="todoBean" method="getById(${header.id})" />
+			</transform>
+		</route>		
+		
+	</camelContext> 	
 
 	<bean id="RestletComponent" class="org.restlet.Component" />
 
@@ -24,5 +31,7 @@
 			<ref bean="RestletComponent" />
 		</constructor-arg>
 	</bean>
- 
+	
+	<bean id ="todoBean" class="net.dev.jcd.transform.ToDoServices"/>
+	
 </beans>
